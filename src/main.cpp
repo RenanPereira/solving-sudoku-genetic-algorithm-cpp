@@ -1,0 +1,116 @@
+//Renan Câmara Pereira 2022
+
+//Solving a sudoku in C++
+
+#include <cmath>
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <vector>
+#include <tuple>
+#include <omp.h>
+#include <algorithm>
+#include "sudoku.h"
+
+using namespace std;
+
+
+
+
+
+int main(void)
+{	
+	// Use current time as seed for random generator
+    //srand((unsigned) time(0));
+	srand(1);
+
+	double start_s = omp_get_wtime();
+
+	SudokuSkelleton sudokuUnsolved = SudokuSkelleton(9,"sudoku_example1.dat");
+
+	sudokuUnsolved.toString();
+
+	cout << sudokuUnsolved.numberOfClues() << "\n";
+
+	SudokuAnsatz sudoku1(sudokuUnsolved);
+
+	std::cout << "\n" << std::endl;
+	sudoku1.toString();
+
+	cout << sudoku1.getWeight() << endl;
+
+
+/*
+	vector< vector<int> > sudoku_to_solve;
+
+	sudoku_to_solve = read_sudoku_from_file(9, "sudoku_example1.dat"); 
+
+	print_sudoku(sudoku_to_solve);
+
+	cout << sudoku_number_of_clues(sudoku_to_solve) << "\n";
+
+	//generate sudoku population
+	vector< vector< vector<int> > > sudoku_population;
+	int N = 50;
+	int N_births_from_vacuum = 10;
+	int N_descendents = 20;
+	int M = N;
+
+
+	vector< vector< vector<int> > > sudoku_pop = generate_population(N, sudoku_to_solve);
+
+
+	int generations = 350;
+	for (int i = 0; i < generations; ++i)
+	{
+		cout << i << "\t" << sudoku_pop.size() << "\n";
+
+
+
+		for (int j = 0; j < N_births_from_vacuum; ++j)
+		{
+			sudoku_pop.push_back( generate_sudoku_by_lines(sudoku_to_solve) );
+		}
+		//mutate some individuals
+		for (int j = 0; j < sudoku_pop.size(); ++j)
+		{
+			int X = ( rand() % sudoku_pop.size() );
+			sudoku_pop[X] = mutate_sudoku(sudoku_to_solve, sudoku_pop[X], 0.25);
+		}
+
+
+		//generate descendents
+		vector< vector< vector<int> > > sudoku_pop_descendents;
+		sudoku_pop_descendents = generate_descendents(sudoku_to_solve, sudoku_pop, N_descendents);
+		//mutate descendents
+		for (int j = 0; j < sudoku_pop_descendents.size(); ++j)
+		{
+			sudoku_pop_descendents[j] = mutate_sudoku(sudoku_to_solve, sudoku_pop_descendents[j], 1.0);
+		}
+
+
+
+		sudoku_pop = survival_of_the_fittest(sudoku_pop, sudoku_pop_descendents, N);
+
+
+
+		int neo_weight = weight_sudoku_configuration(sudoku_pop[0]);
+
+		cout << "weight of the fittest individual: " << neo_weight << "\n";
+		if (neo_weight==0){ break; }
+	
+	}
+	print_sudoku(sudoku_pop[0]);
+
+
+	double stop_s = omp_get_wtime();
+
+    cout << "Run Time: " << (stop_s-start_s) << "\n";
+
+*/
+
+	return 0;
+}
+
+
+
