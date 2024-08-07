@@ -40,7 +40,7 @@ int main(void)
 	cout << sudoku1.getWeight() << endl;
 
 
-/*
+
 	vector< vector<int> > sudoku_to_solve;
 
 	sudoku_to_solve = read_sudoku_from_file(9, "sudoku_example1.dat"); 
@@ -107,7 +107,7 @@ int main(void)
 
     cout << "Run Time: " << (stop_s-start_s) << "\n";
 
-*/
+
 
 	return 0;
 }

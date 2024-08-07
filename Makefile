@@ -1,5 +1,6 @@
 SHELL := /bin/bash
 CXX = g++ -std=c++11 -fopenmp
+#CXX = g++ -O3 -Wall -Wextra -Wfloat-equal -Wundef -Wlogical-op -Wmissing-declarations -Wredundant-decls -Wshadow -std=c++11 -fopenmp
 #CXX = g++ -Wall -Wextra -Wfloat-equal -Wundef -Wlogical-op -Wmissing-declarations -Wredundant-decls -Wshadow -std=c++11 -fopenmp
 
 DEPS = src/parameters.h src/sudoku.h
