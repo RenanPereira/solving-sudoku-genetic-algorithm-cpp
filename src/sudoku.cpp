@@ -8,7 +8,10 @@
 #include <algorithm>
 #include "sudoku.h"
 
-using namespace std;
+using std::string;
+using std::vector;
+using std::tuple;
+
 
 //function that reads sudoku from file to a vector of vectors
 vector< vector<int> > read_sudoku_from_file(int sudoku_lenght, string file_name)
@@ -38,7 +41,7 @@ vector< vector<int> > read_sudoku_from_file(int sudoku_lenght, string file_name)
    		printf("Problem in the sudoku file!\n");
     	abort(); 
     }
-    for (int i = 0; i < sudoku.size(); ++i)
+    for (int i = 0; i < int(sudoku.size()); ++i)
     {	
     	aux = 1 + (sudoku[i].size() - sudoku_lenght);
     	if ( aux!=1 )
@@ -55,9 +58,9 @@ vector< vector<int> > read_sudoku_from_file(int sudoku_lenght, string file_name)
 //function that prints a given sudoku
 int print_sudoku(vector< vector<int> > sudoku)
 {   
-    for (int i = 0; i < sudoku.size(); ++i)
+    for (int i = 0; i < int(sudoku.size()); ++i)
     {
-    	for (int j = 0; j < sudoku[i].size(); ++j)
+    	for (int j = 0; j < int(sudoku[i].size()); ++j)
     	{	
     		printf("%i ", sudoku[i][j]);
     	}
@@ -72,9 +75,9 @@ int print_sudoku(vector< vector<int> > sudoku)
 int sudoku_number_of_clues(vector< vector<int> > sudoku_skeleton)
 {
 	int clues = 0;
-	for (int i = 0; i < sudoku_skeleton.size(); ++i)
+	for (int i = 0; i < int(sudoku_skeleton.size()); ++i)
 	{	
-		for (int j = 0; j < sudoku_skeleton[i].size(); ++j)
+		for (int j = 0; j < int(sudoku_skeleton[i].size()); ++j)
 		{
 			if ( sudoku_skeleton[i][j]!=0 )
 			{
@@ -92,13 +95,13 @@ vector< vector<int> > generate_sudoku_by_lines(vector< vector<int> > sudoku_skel
 {   
     vector< vector<int> > sudoku = sudoku_skeleton;
 
-    for (int i = 0; i < sudoku.size(); ++i)
+    for (int i = 0; i < int(sudoku.size()); ++i)
     {	
     	vector<int> guesses = {};
 
     	//copy clues of the i-sudoku line to a vector
     	vector<int> line_elements = {};
-    	for (int j = 0; j < sudoku[i].size(); ++j)
+    	for (int j = 0; j < int(sudoku[i].size()); ++j)
     	{	
     		if ( sudoku[i][j]!=0 )
     		{
@@ -107,11 +110,11 @@ vector< vector<int> > generate_sudoku_by_lines(vector< vector<int> > sudoku_skel
     	}
 
     	//create vector with guesses: it contains number 1-Nsudoku, excluding clues
-    	for (int j = 0; j < sudoku[i].size(); ++j)
+    	for (int j = 0; j < int(sudoku[i].size()); ++j)
     	{	
     		int element = j+1;
     		bool add_element = true;
-    		for (int k = 0; k < line_elements.size(); ++k)
+    		for (int k = 0; k < int(line_elements.size()); ++k)
     		{
     			if ( line_elements[k]==element )
     			{
@@ -122,7 +125,7 @@ vector< vector<int> > generate_sudoku_by_lines(vector< vector<int> > sudoku_skel
     	}
 		
 		//using a pseudo random number generator, randomly fill sudoku skeleton with guesses
-    	for (int j = 0; j < sudoku[i].size(); ++j)
+    	for (int j = 0; j < int(sudoku[i].size()); ++j)
     	{
     		if ( sudoku[i][j]==0 )
     		{	
@@ -146,14 +149,18 @@ int sudoku_line_weight(vector< vector<int> > sudoku, int line)
 
 	int weight = 0;
 	int sum_count = 0;
-	for (int i = 0; i < sudoku_lin.size(); ++i)
+	for (int i = 0; i < int(sudoku_lin.size()); ++i)
 	{
 		int aux = count(sudoku_lin.begin(), sudoku_lin.end(), i+1);
 		weight = weight + pow(aux-1,2);
 		sum_count = sum_count + aux;
 	}
 
-	if ( sum_count!=sudoku.size() ){ printf("Problem in sudoku_line_weight! Counting not equal to sudoku lenght!\n"); abort(); }
+	if ( sum_count!=int(sudoku.size()) )
+	{ 
+		printf("Problem in sudoku_line_weight! Counting not equal to sudoku lenght!\n"); 
+		abort(); 
+	}
 
 	return weight;
 }
@@ -163,21 +170,25 @@ int sudoku_line_weight(vector< vector<int> > sudoku, int line)
 int sudoku_column_weight(vector< vector<int> > sudoku, int column)
 {	
 	vector<int> sudoku_col(sudoku.size(),0);
-	for (int i = 0; i < sudoku.size(); ++i)
+	for (int i = 0; i < int(sudoku.size()); ++i)
 	{
 		sudoku_col[i] = sudoku[i][column];
 	}
 
 	int weight = 0;
 	int sum_count = 0;
-	for (int i = 0; i < sudoku_col.size(); ++i)
+	for (int i = 0; i < int(sudoku_col.size()); ++i)
 	{
 		int aux = count(sudoku_col.begin(), sudoku_col.end(), i+1);
 		weight = weight + pow(aux-1,2);
 		sum_count = sum_count + aux;
 	}
 
-	if ( sum_count!=sudoku.size() ){ printf("Problem in sudoku_column_weight! Counting not equal to sudoku lenght!\n"); abort(); }
+	if ( sum_count!=int(sudoku.size()) )
+	{ 
+		printf("Problem in sudoku_column_weight! Counting not equal to sudoku lenght!\n"); 
+		abort(); 
+	}
 
 	return weight;
 }
@@ -189,8 +200,15 @@ int sudoku_block_weight(vector< vector<int> > sudoku, int block_line, int block_
 	//Lenght of block: square root of the sudoku size, by definition
 	int minor_square_size = int( sqrt( sudoku.size() ) );
 
-	if ( block_line<0 || block_line>minor_square_size ){ printf("Sudoku block line out of bounds!\n"); abort(); }
-	if ( block_column<0 || block_column>minor_square_size ){ printf("Sudoku block column out of bounds!\n"); abort(); }
+	if ( block_line<0 || block_line>minor_square_size )
+	{ 
+		printf("Sudoku block line out of bounds!\n"); abort(); 
+	}
+	if ( block_column<0 || block_column>minor_square_size )
+	{ 
+		printf("Sudoku block column out of bounds!\n"); 
+		abort(); 
+	}
 
 	int X = block_line*minor_square_size;
 	int Y = block_column*minor_square_size;
@@ -208,14 +226,18 @@ int sudoku_block_weight(vector< vector<int> > sudoku, int block_line, int block_
 
 	int weight = 0;
 	int sum_count = 0;
-	for (int i = 0; i < sudoku_block.size(); ++i)
+	for (int i = 0; i < int(sudoku_block.size()); ++i)
 	{
-		int aux = count(sudoku_block.begin(), sudoku_block.end(), i+1);
-		weight = weight + pow(aux-1,2);
-		sum_count = sum_count + aux;
+		int current_index_counting = count(sudoku_block.begin(), sudoku_block.end(), i+1);
+		weight = weight + pow(current_index_counting-1,2);
+		sum_count = sum_count + current_index_counting;
 	}
 
-	if ( sum_count!=sudoku.size() ){ printf("Problem in sudoku_block_weight! Counting not equal to sudoku lenght!\n"); abort(); }
+	if ( sum_count!=int(sudoku.size()) )
+	{ 
+		printf("Problem in sudoku_block_weight! Counting not equal to sudoku lenght!\n"); 
+		abort(); 
+	}
 
 
 	return weight;
@@ -226,7 +248,7 @@ int sudoku_block_weight(vector< vector<int> > sudoku, int block_line, int block_
 int sudoku_lines_OBS(vector< vector<int> > sudoku)
 {
 	int obs = 0;
-	for (int i = 0; i < sudoku.size(); ++i)
+	for (int i = 0; i < int(sudoku.size()); ++i)
 	{
 		obs = obs + sudoku_line_weight(sudoku, i);
 	}
@@ -239,7 +261,7 @@ int sudoku_lines_OBS(vector< vector<int> > sudoku)
 int sudoku_columns_OBS(vector< vector<int> > sudoku)
 {
 	int obs = 0;
-	for (int i = 0; i < sudoku.size(); ++i)
+	for (int i = 0; i < int(sudoku.size()); ++i)
 	{
 		obs = obs + sudoku_column_weight(sudoku, i);
 	}
@@ -277,9 +299,12 @@ int weight_sudoku_configuration(vector< vector<int> > sudoku)
 }
 
 
-
 //function that mutates a given sudoku
-vector< vector<int> > mutate_sudoku(vector< vector<int> > sudoku_skeleton, vector< vector<int> > sudoku, double max_mutation_fraction)
+vector< vector<int> > mutate_sudoku(
+	vector< vector<int> > sudoku_skeleton, 
+	vector< vector<int> > sudoku, 
+	double max_mutation_fraction
+)
 {	
 	vector< vector<int> > mutated_sudoku = sudoku;
 
@@ -334,9 +359,9 @@ vector< vector<int> > mutate_sudoku(vector< vector<int> > sudoku_skeleton, vecto
 vector< tuple<int, int> > population_weight(vector< vector< vector<int> > > sudoku_population)
 {
 	vector< tuple<int, int> > pop_weight;
-	for (int i = 0; i < sudoku_population.size(); ++i)
+	for (int i = 0; i < int(sudoku_population.size()); ++i)
 	{	
-		tuple<int, int> aux = make_tuple( weight_sudoku_configuration(sudoku_population[i]) , i );
+		tuple<int, int> aux = std::make_tuple( weight_sudoku_configuration(sudoku_population[i]) , i );
 		pop_weight.push_back( aux );
 	}
 
@@ -376,7 +401,11 @@ vector< vector< vector<int> > > generate_population(int N_population, vector< ve
 
 
 //increase the population by generating descendants
-vector< vector< vector<int> > > generate_descendents(vector< vector<int> > sudoku_skeleton, vector< vector< vector<int> > > sudoku_population, int N_descendents)
+vector< vector< vector<int> > > generate_descendents(
+	vector< vector<int> > sudoku_skeleton, 
+	vector< vector< vector<int> > > sudoku_population, 
+	int N_descendents
+)
 {
 	vector< vector< vector<int> > > sudoku_population_descendents;
 	for (int i = 0; i < N_descendents; ++i)
@@ -389,7 +418,7 @@ vector< vector< vector<int> > > generate_descendents(vector< vector<int> > sudok
 		
 		//the son is constructed by chosing lines, randomly, from the parents, guaranteeing that the overall line OBS is conserved and equal to zero
 		vector< vector<int> > sudoku_descendent;
-		for (int j = 0; j < sudoku_skeleton.size(); ++j)
+		for (int j = 0; j < int(sudoku_skeleton.size()); ++j)
 		{
 			int parent = partners[( rand() % 2 )];
 			sudoku_descendent.push_back( sudoku_population[parent][j] );
@@ -402,15 +431,19 @@ vector< vector< vector<int> > > generate_descendents(vector< vector<int> > sudok
 
 
 //after the population generates descedents, only the fittest surivive
-vector< vector< vector<int> > > survival_of_the_fittest(vector< vector< vector<int> > > sudoku_population, vector< vector< vector<int> > > sudoku_population_descendents, int Npop)
+vector< vector< vector<int> > > survival_of_the_fittest(
+	vector< vector< vector<int> > > sudoku_population, 
+	vector< vector< vector<int> > > sudoku_population_descendents, 
+	int Npop
+)
 {	
 	//add parents and descendents to an over population
 	vector< vector< vector<int> > > sudoku_overpopulation;
-	for (int i = 0; i < sudoku_population.size(); ++i)
+	for (int i = 0; i < int(sudoku_population.size()); ++i)
 	{
 		sudoku_overpopulation.push_back( sudoku_population[i] );
 	}
-	for (int i = 0; i < sudoku_population_descendents.size(); ++i)
+	for (int i = 0; i < int(sudoku_population_descendents.size()); ++i)
 	{
 		sudoku_overpopulation.push_back( sudoku_population_descendents[i] );
 	}
@@ -423,7 +456,7 @@ vector< vector< vector<int> > > survival_of_the_fittest(vector< vector< vector<i
 	vector< vector< vector<int> > > sudoku_newpopulation;
 	for (int i = 0; i < Npop; ++i)
 	{
-		int sudoku_surviver_index = get<1>(sudoku_overpop_weight[i]);
+		int sudoku_surviver_index = std::get<1>(sudoku_overpop_weight[i]);
 		sudoku_newpopulation.push_back( sudoku_overpopulation[sudoku_surviver_index] );
 	}
 
@@ -461,7 +494,7 @@ SudokuSkelleton::SudokuSkelleton(int sudoku_lenght, string file_name)
    		printf("Problem in the sudoku file!\n");
     	abort(); 
     }
-    for (int i = 0; i < file_input.size(); ++i)
+    for (int i = 0; i < int(file_input.size()); ++i)
     {	
     	aux = 1 + (file_input[i].size() - sudoku_lenght);
     	if ( aux!=1 )
@@ -476,9 +509,9 @@ SudokuSkelleton::SudokuSkelleton(int sudoku_lenght, string file_name)
 
 void SudokuSkelleton::toString()
 {
-	for (int i = 0; i < sudokuSkelleton.size(); ++i)
+	for (int i = 0; i < int(sudokuSkelleton.size()); ++i)
     {
-    	for (int j = 0; j < sudokuSkelleton[i].size(); ++j)
+    	for (int j = 0; j < int(sudokuSkelleton[i].size()); ++j)
     	{	
     		printf("%i ", sudokuSkelleton[i][j]);
     	}
@@ -489,9 +522,9 @@ void SudokuSkelleton::toString()
 int SudokuSkelleton::numberOfClues()
 {
 	int clues = 0;
-	for (int i = 0; i < sudokuSkelleton.size(); ++i)
+	for (int i = 0; i < int(sudokuSkelleton.size()); ++i)
 	{	
-		for (int j = 0; j < sudokuSkelleton[i].size(); ++j)
+		for (int j = 0; j < int(sudokuSkelleton[i].size()); ++j)
 		{
 			if ( sudokuSkelleton[i][j]!=0 ){ clues = clues + 1; }
 		}
@@ -502,11 +535,11 @@ int SudokuSkelleton::numberOfClues()
 
 void SudokuAnsatz::toString()
 {
-	for (int i = 0; i < sudoku.size(); ++i)
+	for (int i = 0; i < int(sudokuAnsatz.size()); ++i)
     {
-    	for (int j = 0; j < sudoku[i].size(); ++j)
+    	for (int j = 0; j < int(sudokuAnsatz[i].size()); ++j)
     	{	
-    		printf("%i ", sudoku[i][j]);
+    		printf("%i ", sudokuAnsatz[i][j]);
     	}
     	printf("\n");
     }
@@ -514,40 +547,48 @@ void SudokuAnsatz::toString()
 
 int SudokuAnsatz::lineWeight(int line)
 {	
-	vector<int> sudoku_lin = sudoku[line];
+	vector<int> sudoku_lin = sudokuAnsatz[line];
 
 	int weight = 0;
 	int sum_count = 0;
-	for (int i = 0; i < sudoku_lin.size(); ++i)
+	for (int i = 0; i < int(sudoku_lin.size()); ++i)
 	{
 		int aux = count(sudoku_lin.begin(), sudoku_lin.end(), i+1);
 		weight = weight + pow(aux-1,2);
 		sum_count = sum_count + aux;
 	}
 
-	if ( sum_count!=sudoku.size() ){ printf("Problem in sudoku_line_weight! Counting not equal to sudoku lenght!\n"); abort(); }
+	if ( sum_count!=int(sudokuAnsatz.size()) )
+	{ 
+		printf("Problem in sudoku_line_weight! Counting not equal to sudoku lenght!\n"); 
+		abort(); 
+	}
 
 	return weight;
 }
 
 int SudokuAnsatz::columnWeight(int column)
 {	
-	vector<int> sudoku_col(sudoku.size(),0);
-	for (int i = 0; i < sudoku.size(); ++i)
+	vector<int> sudoku_col(sudokuAnsatz.size(),0);
+	for (int i = 0; i < int(sudokuAnsatz.size()); ++i)
 	{
-		sudoku_col[i] = sudoku[i][column];
+		sudoku_col[i] = sudokuAnsatz[i][column];
 	}
 
 	int weight = 0;
 	int sum_count = 0;
-	for (int i = 0; i < sudoku_col.size(); ++i)
+	for (int i = 0; i < int(sudoku_col.size()); ++i)
 	{
 		int aux = count(sudoku_col.begin(), sudoku_col.end(), i+1);
 		weight = weight + pow(aux-1,2);
 		sum_count = sum_count + aux;
 	}
 
-	if ( sum_count!=sudoku.size() ){ printf("Problem in sudoku_column_weight! Counting not equal to sudoku lenght!\n"); abort(); }
+	if ( sum_count!=int(sudokuAnsatz.size()) )
+	{ 
+		printf("Problem in sudoku_column_weight! Counting not equal to sudokuAnsatz lenght!\n"); 
+		abort(); 
+	}
 
 	return weight;
 }
@@ -555,35 +596,47 @@ int SudokuAnsatz::columnWeight(int column)
 int SudokuAnsatz::blockWeight(int block_line, int block_column)
 {	
 	//Lenght of block: square root of the sudoku size, by definition
-	int minor_square_size = int( sqrt( sudoku.size() ) );
+	int minor_square_size = int( sqrt( sudokuAnsatz.size() ) );
 
-	if ( block_line<0 || block_line>minor_square_size ){ printf("Sudoku block line out of bounds!\n"); abort(); }
-	if ( block_column<0 || block_column>minor_square_size ){ printf("Sudoku block column out of bounds!\n"); abort(); }
+	if ( block_line<0 || block_line>minor_square_size )
+	{ 
+		printf("Sudoku block line out of bounds!\n"); 
+		abort(); 
+	}
+	if ( block_column<0 || block_column>minor_square_size )
+	{ 
+		printf("Sudoku block column out of bounds!\n"); 
+		abort(); 
+	}
 
 	int X = block_line*minor_square_size;
 	int Y = block_column*minor_square_size;
 
-	vector<int> sudoku_block(sudoku.size(),0);
+	vector<int> sudoku_block(sudokuAnsatz.size(),0);
 	int aux = 0;
 	for (int i = X; i < X+minor_square_size; ++i)
 	{
 		for (int j = Y; j < Y+minor_square_size; ++j)
 		{	
-			sudoku_block[aux] = sudoku[i][j];
+			sudoku_block[aux] = sudokuAnsatz[i][j];
 			aux = aux + 1;
 		}
 	}
 
 	int weight = 0;
 	int sum_count = 0;
-	for (int i = 0; i < sudoku_block.size(); ++i)
+	for (int i = 0; i < int(sudoku_block.size()); ++i)
 	{
-		int aux = count(sudoku_block.begin(), sudoku_block.end(), i+1);
-		weight = weight + pow(aux-1,2);
-		sum_count = sum_count + aux;
+		int current_index_counting = count(sudoku_block.begin(), sudoku_block.end(), i+1);
+		weight = weight + pow(current_index_counting-1,2);
+		sum_count = sum_count + current_index_counting;
 	}
 
-	if ( sum_count!=sudoku.size() ){ printf("Problem in sudoku_block_weight! Counting not equal to sudoku lenght!\n"); abort(); }
+	if ( sum_count!=int(sudokuAnsatz.size()) )
+	{ 
+		printf("Problem in sudoku_block_weight! Counting not equal to sudoku lenght!\n"); 
+		abort(); 
+	}
 
 	return weight;
 }
@@ -591,7 +644,10 @@ int SudokuAnsatz::blockWeight(int block_line, int block_column)
 int SudokuAnsatz::linesOBS()
 {
 	int obs = 0;
-	for (int i = 0; i < sudoku.size(); ++i){ obs = obs + lineWeight(i); }
+	for (int i = 0; i < int(sudokuAnsatz.size()); ++i)
+	{ 
+		obs = obs + lineWeight(i); 
+	}
 	
 	return obs;
 }
@@ -599,19 +655,25 @@ int SudokuAnsatz::linesOBS()
 int SudokuAnsatz::columnsOBS()
 {
 	int obs = 0;
-	for (int i = 0; i < sudoku.size(); ++i){ obs = obs + columnWeight(i); }
+	for (int i = 0; i < int(sudokuAnsatz.size()); ++i)
+	{ 
+		obs = obs + columnWeight(i); 
+	}
 
 	return obs;
 }
 
 int SudokuAnsatz::blocksOBS()
 {	
-	int minor_square_size = int( sqrt(sudoku.size()) );
+	int minor_square_size = int( sqrt(sudokuAnsatz.size()) );
 	int obs = 0;
 
 	for (int L = 0; L < minor_square_size; ++L)
 	{	
-		for (int C = 0; C < minor_square_size; ++C){ obs = obs + blockWeight(L, C); }
+		for (int C = 0; C < minor_square_size; ++C)
+		{ 
+			obs = obs + blockWeight(L, C); 
+		}
 	}
 
 	return obs;
@@ -631,13 +693,13 @@ vector< vector<int> > SudokuAnsatz::loadByLines(SudokuSkelleton sudokuSkelletonA
 {   
 	vector< vector<int> > sudoku = sudokuSkelletonAux.getSkelleton();
 
-    for (int i = 0; i < sudoku.size(); ++i)
+    for (int i = 0; i < int(sudoku.size()); ++i)
     {	
     	vector<int> guesses = {};
 
     	//copy clues of the i-sudoku line to a vector
     	vector<int> line_elements = {};
-    	for (int j = 0; j < sudoku[i].size(); ++j)
+    	for (int j = 0; j < int(sudoku[i].size()); ++j)
     	{	
     		if ( sudoku[i][j]!=0 )
     		{
@@ -646,11 +708,11 @@ vector< vector<int> > SudokuAnsatz::loadByLines(SudokuSkelleton sudokuSkelletonA
     	}
 
     	//create vector with guesses: it contains number 1-Nsudoku, excluding clues
-    	for (int j = 0; j < sudoku[i].size(); ++j)
+    	for (int j = 0; j < int(sudoku[i].size()); ++j)
     	{	
     		int element = j+1;
     		bool add_element = true;
-    		for (int k = 0; k < line_elements.size(); ++k)
+    		for (int k = 0; k < int(line_elements.size()); ++k)
     		{
     			if ( line_elements[k]==element )
     			{
@@ -661,12 +723,15 @@ vector< vector<int> > SudokuAnsatz::loadByLines(SudokuSkelleton sudokuSkelletonA
     	}
 		
 		//using a pseudo random number generator, randomly fill sudoku skeleton with guesses
-    	for (int j = 0; j < sudoku[i].size(); ++j)
+    	for (int j = 0; j < int(sudoku[i].size()); ++j)
     	{
     		if ( sudoku[i][j]==0 )
     		{	
     			int pos = 0;
-    			if ( guesses.size()>1 ){ pos = ( rand() % guesses.size() ); }
+    			if ( guesses.size()>1 )
+				{ 
+					pos = ( rand() % guesses.size() ); 
+				}
     			sudoku[i][j] = guesses[pos];
     			guesses.erase( guesses.begin()+pos );
     		}
@@ -676,72 +741,14 @@ vector< vector<int> > SudokuAnsatz::loadByLines(SudokuSkelleton sudokuSkelletonA
 	return sudoku;
 }
 
-SudokuAnsatz::SudokuAnsatz(vector< vector<int> > sudokuAux)
+SudokuAnsatz::SudokuAnsatz(vector< vector<int> > sudokuAnsatzAux)
 {
-	sudoku = sudokuAux;
+	sudokuAnsatz = sudokuAnsatzAux;
 	setWeight(calculateWeight());
 }
 
 SudokuAnsatz::SudokuAnsatz(SudokuSkelleton sudokuSkelletonAux)
 {
-	sudoku = loadByLines(sudokuSkelletonAux);
+	sudokuAnsatz = loadByLines(sudokuSkelletonAux);
 	setWeight(calculateWeight());
 }
-
-
-/*
-SudokuAnsatz SudokuSkelleton::mutate()
-{   
-	vector< vector<int> > sudoku = sudokuSkelleton;
-
-	vector< vector<int> > mutated_sudoku = sudoku;
-
-	//calculate the maximum number of mutations
-	int max_number_mutations = int( max_mutation_fraction*( pow(sudoku_skeleton.size(),2) - sudoku_number_of_clues(sudoku_skeleton) ) );
-
-	if (max_number_mutations>0)
-	{
-		//calculate the number of mutations randomly
-		int number_mutations = ( rand() % max_number_mutations + 1 );
-
-		//apply mutations
-		for (int i = 0; i < number_mutations; ++i)
-		{
-			//randomly choose a line to mutate
-			int L = ( rand() % sudoku_skeleton.size() );
-
-			//randomly choose two elements in the line to exchange position
-			bool generate = true;
-			while ( generate==true )
-			{
-				int C1 = ( rand() % sudoku_skeleton.size() );
-				int C2 = C1;
-				while ( C2==C1 ){	C2 = ( rand() % sudoku_skeleton.size() ); }
-
-				//only apply mutation on top of clues
-				if ( sudoku_skeleton[L][C1]==0 && sudoku_skeleton[L][C2]==0 )
-				{
-					int sudoku_weight_before_mutation = weight_sudoku_configuration(mutated_sudoku);
-					int aux1 = mutated_sudoku[L][C1];
-					int aux2 = mutated_sudoku[L][C2];
-					mutated_sudoku[L][C1] = aux2;
-					mutated_sudoku[L][C2] = aux1;
-					int sudoku_weight_after_mutation = weight_sudoku_configuration(mutated_sudoku);
-
-					//only accept mutation if the weight after mutation is smaller
-					if ( sudoku_weight_after_mutation>sudoku_weight_before_mutation )
-					{
-						mutated_sudoku[L][C1] = aux1;
-						mutated_sudoku[L][C2] = aux2;
-					}
-					generate=false;
-				}
-			}
-		}
-	}
-
-	return mutated_sudoku;
-
-    return sudoku;
-}
-*/

@@ -29,11 +29,23 @@ int sudoku_tournament(std::vector< std::vector< std::vector<int> > > );
 
 std::vector< std::vector< std::vector<int> > > generate_population(int , std::vector< std::vector<int> > );
 
-std::vector< std::vector< std::vector<int> > > generate_descendents(std::vector< std::vector<int> > , std::vector< std::vector< std::vector<int> > > , int);
+std::vector< std::vector< std::vector<int> > > generate_descendents(
+	std::vector< std::vector<int> > , 
+	std::vector< std::vector< std::vector<int> > > , 
+	int
+);
 
-std::vector< std::vector<int> > mutate_sudoku(std::vector< std::vector<int> > , std::vector< std::vector<int> >, double );
+std::vector< std::vector<int> > mutate_sudoku(
+	std::vector< std::vector<int> > , 
+	std::vector< std::vector<int> >, 
+	double 
+);
 
-std::vector< std::vector< std::vector<int> > > survival_of_the_fittest(std::vector< std::vector< std::vector<int> > > , std::vector< std::vector< std::vector<int> > > , int );
+std::vector< std::vector< std::vector<int> > > survival_of_the_fittest(
+	std::vector< std::vector< std::vector<int> > > , 
+	std::vector< std::vector< std::vector<int> > > , 
+	int 
+);
 
 
 class SudokuSkelleton
@@ -52,7 +64,7 @@ public:
 class SudokuAnsatz
 {
 private:
-	std::vector< std::vector<int> > sudoku;
+	std::vector< std::vector<int> > sudokuAnsatz;
     int sudokuWeight;
 
 private:
@@ -62,7 +74,6 @@ public:
 	std::vector< std::vector<int> > loadByLines(SudokuSkelleton);
 	SudokuAnsatz(std::vector< std::vector<int> >);
 	SudokuAnsatz(SudokuSkelleton);
-	int numberOfClues();
 	void toString();
 	int linesOBS();
 	int columnsOBS();
@@ -72,9 +83,8 @@ public:
 	int blockWeight(int , int );
 	int calculateWeight();
 	int getWeight(){ return sudokuWeight; }
-	std::vector< std::vector<int> > getAnsatz(){ return sudoku; }
+	std::vector< std::vector<int> > getAnsatz(){ return sudokuAnsatz; }
 };
-
 
 
 #endif

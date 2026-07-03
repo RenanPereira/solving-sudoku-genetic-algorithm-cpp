@@ -44,7 +44,6 @@ int main(void)
 	int N = 50;
 	int N_births_from_vacuum = 10;
 	int N_descendents = 20;
-	int M = N;
 
 
 	std::vector< std::vector< std::vector<int> > > sudoku_pop = generate_population(N, sudoku_to_solve);
@@ -62,7 +61,7 @@ int main(void)
 			sudoku_pop.push_back( generate_sudoku_by_lines(sudoku_to_solve) );
 		}
 		//mutate some individuals
-		for (int j = 0; j < sudoku_pop.size(); ++j)
+		for (int j = 0; j < int(sudoku_pop.size()); ++j)
 		{
 			int X = ( rand() % sudoku_pop.size() );
 			sudoku_pop[X] = mutate_sudoku(sudoku_to_solve, sudoku_pop[X], 0.25);
@@ -73,7 +72,7 @@ int main(void)
 		std::vector< std::vector< std::vector<int> > > sudoku_pop_descendents;
 		sudoku_pop_descendents = generate_descendents(sudoku_to_solve, sudoku_pop, N_descendents);
 		//mutate descendents
-		for (int j = 0; j < sudoku_pop_descendents.size(); ++j)
+		for (int j = 0; j < int(sudoku_pop_descendents.size()); ++j)
 		{
 			sudoku_pop_descendents[j] = mutate_sudoku(sudoku_to_solve, sudoku_pop_descendents[j], 1.0);
 		}
