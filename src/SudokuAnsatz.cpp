@@ -40,7 +40,7 @@ int SudokuAnsatz::lineWeight(int line)
 
 	if ( sum_count!=int(sudokuAnsatz.size()) )
 	{ 
-		printf("Problem in sudoku_line_weight! Counting not equal to sudoku lenght!\n"); 
+		printf("Problem in lineWeight! Counting not equal to sudoku lenght!\n"); 
 		abort(); 
 	}
 
@@ -66,7 +66,7 @@ int SudokuAnsatz::columnWeight(int column)
 
 	if ( sum_count!=int(sudokuAnsatz.size()) )
 	{ 
-		printf("Problem in sudoku_column_weight! Counting not equal to sudokuAnsatz lenght!\n"); 
+		printf("Problem in columnWeight! Counting not equal to sudokuAnsatz lenght!\n"); 
 		abort(); 
 	}
 
@@ -114,7 +114,7 @@ int SudokuAnsatz::blockWeight(int block_line, int block_column)
 
 	if ( sum_count!=int(sudokuAnsatz.size()) )
 	{ 
-		printf("Problem in sudoku_block_weight! Counting not equal to sudoku lenght!\n"); 
+		printf("Problem in blockWeight! Counting not equal to sudoku lenght!\n"); 
 		abort(); 
 	}
 
