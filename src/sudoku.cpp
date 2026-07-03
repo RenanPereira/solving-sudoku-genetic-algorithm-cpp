@@ -54,7 +54,6 @@ vector< vector<int> > Sudoku::read_from_file(int sudoku_lenght, string file_name
     return sudoku;   
 }
 
-
 //function that prints a given sudoku
 int Sudoku::print(vector< vector<int> > sudoku)
 {   
@@ -69,7 +68,6 @@ int Sudoku::print(vector< vector<int> > sudoku)
 
     return 0;   
 }
-
 
 //function that returns the number of clues in the sudoku
 int Sudoku::number_of_clues(vector< vector<int> > sudoku_skeleton)
@@ -88,7 +86,6 @@ int Sudoku::number_of_clues(vector< vector<int> > sudoku_skeleton)
 
 	return clues;
 }
-
 
 //function that generates a sudoku given an initial sudoku filled with clues
 vector< vector<int> > Sudoku::generate_by_lines(vector< vector<int> > sudoku_skeleton)
@@ -121,7 +118,10 @@ vector< vector<int> > Sudoku::generate_by_lines(vector< vector<int> > sudoku_ske
     				add_element = false;
     			}
     		}
-    		if (add_element==true){ guesses.push_back( element ); }
+    		if (add_element==true)
+			{ 
+				guesses.push_back( element ); 
+			}
     	}
 		
 		//using a pseudo random number generator, randomly fill sudoku skeleton with guesses
@@ -130,7 +130,10 @@ vector< vector<int> > Sudoku::generate_by_lines(vector< vector<int> > sudoku_ske
     		if ( sudoku[i][j]==0 )
     		{	
     			int pos = 0;
-    			if ( guesses.size()>1 ){ pos = ( rand() % guesses.size() ); }
+    			if ( guesses.size()>1 )
+				{ 
+					pos = ( rand() % guesses.size() ); 
+				}
     			sudoku[i][j] = guesses[pos];
     			guesses.erase( guesses.begin()+pos );
     		}
@@ -140,7 +143,6 @@ vector< vector<int> > Sudoku::generate_by_lines(vector< vector<int> > sudoku_ske
 
     return sudoku;   
 }
-
 
 //function that calculate the lines weight of a given sudoku
 int Sudoku::line_weight(vector< vector<int> > sudoku, int line)
@@ -164,7 +166,6 @@ int Sudoku::line_weight(vector< vector<int> > sudoku, int line)
 
 	return weight;
 }
-
 
 //function that calculate the columns weight of a given sudoku
 int Sudoku::column_weight(vector< vector<int> > sudoku, int column)
@@ -193,7 +194,6 @@ int Sudoku::column_weight(vector< vector<int> > sudoku, int column)
 	return weight;
 }
 
-
 //function that calculate the block weight of a given sudoku
 int Sudoku::block_weight(vector< vector<int> > sudoku, int block_line, int block_column)
 {	
@@ -210,14 +210,14 @@ int Sudoku::block_weight(vector< vector<int> > sudoku, int block_line, int block
 		abort(); 
 	}
 
-	int X = block_line*minor_square_size;
-	int Y = block_column*minor_square_size;
+	int xx = block_line*minor_square_size;
+	int yy = block_column*minor_square_size;
 
 	vector<int> sudoku_block(sudoku.size(),0);
 	int aux = 0;
-	for (int i = X; i < X+minor_square_size; ++i)
+	for (int i = xx; i < xx+minor_square_size; ++i)
 	{
-		for (int j = Y; j < Y+minor_square_size; ++j)
+		for (int j = yy; j < yy+minor_square_size; ++j)
 		{	
 			sudoku_block[aux] = sudoku[i][j];
 			aux = aux + 1;
@@ -243,7 +243,6 @@ int Sudoku::block_weight(vector< vector<int> > sudoku, int block_line, int block
 	return weight;
 }
 
-
 //function that calculate the lines observable of a given sudoku
 int Sudoku::lines_observable(vector< vector<int> > sudoku)
 {
@@ -255,7 +254,6 @@ int Sudoku::lines_observable(vector< vector<int> > sudoku)
 
 	return obs;
 }
-
 
 //function that calculate the columns observable of a given sudoku
 int Sudoku::columns_observable(vector< vector<int> > sudoku)
@@ -269,24 +267,22 @@ int Sudoku::columns_observable(vector< vector<int> > sudoku)
 	return obs;
 }
 
-
 //function that calculate the blocks observable of a given sudoku
 int Sudoku::blocks_observable(vector< vector<int> > sudoku)
 {	
 	int minor_square_size = int( sqrt(sudoku.size()) );
 	int obs = 0;
 
-	for (int L = 0; L < minor_square_size; ++L)
+	for (int l = 0; l < minor_square_size; ++l)
 	{	
-		for (int C = 0; C < minor_square_size; ++C)
+		for (int c = 0; c < minor_square_size; ++c)
 		{
-			obs = obs + block_weight(sudoku, L, C);
+			obs = obs + block_weight(sudoku, l, c);
 		}
 	}
 
 	return obs;
 }
-
 
 //function that calculates the total weight of a sudoku
 int Sudoku::weight_configuration(vector< vector<int> > sudoku)
@@ -297,7 +293,6 @@ int Sudoku::weight_configuration(vector< vector<int> > sudoku)
 
 	return W;
 }
-
 
 //function that mutates a given sudoku
 vector< vector<int> > Sudoku::mutate(
@@ -368,30 +363,38 @@ vector< tuple<int, int> > Sudoku::population_weight(vector< vector< vector<int> 
 	return pop_weight;
 }
 
-
 //sudoku battle
 int Sudoku::battle(vector< vector< vector<int> > > sudoku_population)
 {
 	int warrior_1 = ( rand() % sudoku_population.size() );
 	int warrior_2 = ( rand() % sudoku_population.size() );
-	while(warrior_2==warrior_1){ warrior_2 = ( rand() % sudoku_population.size() ); }
+	
+	while(warrior_2==warrior_1)
+	{ 
+		warrior_2 = ( rand() % sudoku_population.size() ); 
+	}
 
 	int weight_warrior_1 = weight_configuration(sudoku_population[warrior_1]);
 	int weight_warrior_2 = weight_configuration(sudoku_population[warrior_2]);
 
 	int winner = 0;
-	if ( weight_warrior_1<weight_warrior_2 ){ winner = warrior_1; }
-	else{ winner = warrior_2; }
+	if ( weight_warrior_1<weight_warrior_2 )
+	{ 
+		winner = warrior_1; 
+	}
+	else
+	{ 
+		winner = warrior_2; 
+	}
 
 	return winner;
 }
 
-
 //generate population
-vector< vector< vector<int> > > Sudoku::generate_population(int N_population, vector< vector<int> > sudoku_skeleton)
+vector< vector< vector<int> > > Sudoku::generate_population(int population_size, vector< vector<int> > sudoku_skeleton)
 {
 	vector< vector< vector<int> > > population;
-	for (int i = 0; i < N_population; ++i)
+	for (int i = 0; i < population_size; ++i)
 	{
 		population.push_back( generate_by_lines(sudoku_skeleton) );
 	}
@@ -399,24 +402,26 @@ vector< vector< vector<int> > > Sudoku::generate_population(int N_population, ve
 	return population;
 }
 
-
 //increase the population by generating descendants
 vector< vector< vector<int> > > Sudoku::generate_descendents(
 	vector< vector<int> > sudoku_skeleton, 
 	vector< vector< vector<int> > > sudoku_population, 
-	int N_descendents
+	int number_descendents
 )
 {
 	vector< vector< vector<int> > > sudoku_population_descendents;
-	for (int i = 0; i < N_descendents; ++i)
+	for (int i = 0; i < number_descendents; ++i)
 	{
 		//create couple
 		vector<int> partners;
 		partners.push_back( battle(sudoku_population) );
 		partners.push_back( battle(sudoku_population) );
-		while( partners[0]==partners[1] ){ partners[0] = battle(sudoku_population); }
+		while( partners[0]==partners[1] )
+		{ 
+			partners[0] = battle(sudoku_population); 
+		}
 		
-		//the son is constructed by chosing lines, randomly, from the parents, guaranteeing that the overall line OBS is conserved and equal to zero
+		//the son is constructed by chosing lines, randomly, from the parents, guaranteeing that the overall line observable is conserved and equal to zero
 		vector< vector<int> > sudoku_descendent;
 		for (int j = 0; j < int(sudoku_skeleton.size()); ++j)
 		{
@@ -429,12 +434,11 @@ vector< vector< vector<int> > > Sudoku::generate_descendents(
 	return sudoku_population_descendents;
 }
 
-
 //after the population generates descedents, only the fittest surivive
 vector< vector< vector<int> > > Sudoku::survival_of_the_fittest(
 	vector< vector< vector<int> > > sudoku_population, 
 	vector< vector< vector<int> > > sudoku_population_descendents, 
-	int Npop
+	int population_size
 )
 {	
 	//add parents and descendents to an over population
@@ -454,7 +458,7 @@ vector< vector< vector<int> > > Sudoku::survival_of_the_fittest(
 
 	//create new population
 	vector< vector< vector<int> > > sudoku_newpopulation;
-	for (int i = 0; i < Npop; ++i)
+	for (int i = 0; i < population_size; ++i)
 	{
 		int sudoku_surviver_index = std::get<1>(sudoku_overpop_weight[i]);
 		sudoku_newpopulation.push_back( sudoku_overpopulation[sudoku_surviver_index] );
