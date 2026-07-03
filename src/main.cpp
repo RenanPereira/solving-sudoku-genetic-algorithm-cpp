@@ -33,11 +33,11 @@ int main(void)
 
 	std::vector< std::vector<int> > sudoku_to_solve;
 
-	sudoku_to_solve = read_sudoku_from_file(9, "sudoku_example1.dat"); 
+	sudoku_to_solve = Sudoku::read_sudoku_from_file(9, "sudoku_example1.dat"); 
 
-	print_sudoku(sudoku_to_solve);
+	Sudoku::print_sudoku(sudoku_to_solve);
 
-	std::cout << sudoku_number_of_clues(sudoku_to_solve) << "\n";
+	std::cout << Sudoku::sudoku_number_of_clues(sudoku_to_solve) << "\n";
 
 	//generate sudoku population
 	std::vector< std::vector< std::vector<int> > > sudoku_population;
@@ -46,7 +46,7 @@ int main(void)
 	int N_descendents = 20;
 
 
-	std::vector< std::vector< std::vector<int> > > sudoku_pop = generate_population(N, sudoku_to_solve);
+	std::vector< std::vector< std::vector<int> > > sudoku_pop = Sudoku::generate_population(N, sudoku_to_solve);
 
 
 	int generations = 350;
@@ -58,38 +58,38 @@ int main(void)
 
 		for (int j = 0; j < N_births_from_vacuum; ++j)
 		{
-			sudoku_pop.push_back( generate_sudoku_by_lines(sudoku_to_solve) );
+			sudoku_pop.push_back( Sudoku::generate_sudoku_by_lines(sudoku_to_solve) );
 		}
 		//mutate some individuals
 		for (int j = 0; j < int(sudoku_pop.size()); ++j)
 		{
 			int X = ( rand() % sudoku_pop.size() );
-			sudoku_pop[X] = mutate_sudoku(sudoku_to_solve, sudoku_pop[X], 0.25);
+			sudoku_pop[X] = Sudoku::mutate_sudoku(sudoku_to_solve, sudoku_pop[X], 0.25);
 		}
 
 
 		//generate descendents
 		std::vector< std::vector< std::vector<int> > > sudoku_pop_descendents;
-		sudoku_pop_descendents = generate_descendents(sudoku_to_solve, sudoku_pop, N_descendents);
+		sudoku_pop_descendents = Sudoku::generate_descendents(sudoku_to_solve, sudoku_pop, N_descendents);
 		//mutate descendents
 		for (int j = 0; j < int(sudoku_pop_descendents.size()); ++j)
 		{
-			sudoku_pop_descendents[j] = mutate_sudoku(sudoku_to_solve, sudoku_pop_descendents[j], 1.0);
+			sudoku_pop_descendents[j] = Sudoku::mutate_sudoku(sudoku_to_solve, sudoku_pop_descendents[j], 1.0);
 		}
 
 
 
-		sudoku_pop = survival_of_the_fittest(sudoku_pop, sudoku_pop_descendents, N);
+		sudoku_pop = Sudoku::survival_of_the_fittest(sudoku_pop, sudoku_pop_descendents, N);
 
 
 
-		int neo_weight = weight_sudoku_configuration(sudoku_pop[0]);
+		int neo_weight = Sudoku::weight_sudoku_configuration(sudoku_pop[0]);
 
 		std::cout << "weight of the fittest individual: " << neo_weight << "\n";
 		if (neo_weight==0){ break; }
 	
 	}
-	print_sudoku(sudoku_pop[0]);
+	Sudoku::print_sudoku(sudoku_pop[0]);
 
 
 	double stop_s = omp_get_wtime();

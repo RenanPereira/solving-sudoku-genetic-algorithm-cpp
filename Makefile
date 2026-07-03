@@ -3,11 +3,14 @@ CXX = g++ -O3 -Wall -Wextra -Wfloat-equal -Wundef -Wlogical-op -Wmissing-declara
 
 INCLUDE_DIRS = -Isrc
 
-DEPS = src/sudoku.h
+DEPS = src/sudoku.h \
+	   src/SudokuSkelleton.h \
+	   src/SudokuAnsatz.h
 
 OBJ = obj/main.o \
-	  obj/sudoku.o
-
+	  obj/sudoku.o \
+	  obj/SudokuSkelleton.o \
+	  obj/SudokuAnsatz.o
 
 obj/%.o: src/%.cpp $(DEPS)
 	$(CXX) $(INCLUDE_DIRS) -c $< -o $@
