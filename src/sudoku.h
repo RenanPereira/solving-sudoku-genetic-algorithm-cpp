@@ -1,69 +1,68 @@
 #ifndef SUDOKU_H
 #define SUDOKU_H
 
-using namespace std;
+std::vector< std::vector<int> > read_sudoku_from_file(int , std::string );
 
-vector< vector<int> > read_sudoku_from_file(int , string );
+int print_sudoku(std::vector< std::vector<int> > );
 
-int print_sudoku(vector< vector<int> > );
+int sudoku_number_of_clues(std::vector< std::vector<int> > );
 
-int sudoku_number_of_clues(vector< vector<int> > );
+std::vector< std::vector<int> > generate_sudoku_by_lines(std::vector< std::vector<int> > );
 
-vector< vector<int> > generate_sudoku_by_lines(vector< vector<int> > );
+int sudoku_line_weight(std::vector< std::vector<int> > , int );
 
-int sudoku_line_weight(vector< vector<int> > , int );
+int sudoku_column_weight(std::vector< std::vector<int> > , int );
 
-int sudoku_column_weight(vector< vector<int> > , int );
+int sudoku_block_weight(std::vector< std::vector<int> > , int , int );
 
-int sudoku_block_weight(vector< vector<int> > , int , int );
+int sudoku_lines_OBS(std::vector< std::vector<int> > );
 
-int sudoku_lines_OBS(vector< vector<int> > );
+int sudoku_columns_OBS(std::vector< std::vector<int> > );
 
-int sudoku_columns_OBS(vector< vector<int> > );
+int sudoku_blocks_OBS(std::vector< std::vector<int> > );
 
-int sudoku_blocks_OBS(vector< vector<int> > );
+int weight_sudoku_configuration(std::vector< std::vector<int> > );
 
-int weight_sudoku_configuration(vector< vector<int> > );
+std::vector< std::tuple<int, int> > population_weight(std::vector< std::vector< std::vector<int> > > );
 
-vector< tuple<int, int> > population_weight(vector< vector< vector<int> > > );
+int sudoku_tournament(std::vector< std::vector< std::vector<int> > > );
 
-int sudoku_tournament(vector< vector< vector<int> > > );
+std::vector< std::vector< std::vector<int> > > generate_population(int , std::vector< std::vector<int> > );
 
-vector< vector< vector<int> > > generate_population(int , vector< vector<int> > );
+std::vector< std::vector< std::vector<int> > > generate_descendents(std::vector< std::vector<int> > , std::vector< std::vector< std::vector<int> > > , int);
 
-vector< vector< vector<int> > > generate_descendents(vector< vector<int> > , vector< vector< vector<int> > > , int);
+std::vector< std::vector<int> > mutate_sudoku(std::vector< std::vector<int> > , std::vector< std::vector<int> >, double );
 
-vector< vector<int> > mutate_sudoku(vector< vector<int> > , vector< vector<int> >, double );
-
-vector< vector< vector<int> > > survival_of_the_fittest(vector< vector< vector<int> > > , vector< vector< vector<int> > > , int );
+std::vector< std::vector< std::vector<int> > > survival_of_the_fittest(std::vector< std::vector< std::vector<int> > > , std::vector< std::vector< std::vector<int> > > , int );
 
 
 class SudokuSkelleton
 {
 private: 
-	vector< vector<int> > sudokuSkelleton;
+	std::vector< std::vector<int> > sudokuSkelleton;
 
 public: 
-	SudokuSkelleton(int , string );
+	SudokuSkelleton(int , std::string );
 	void toString();
 	int numberOfClues();
-	vector< vector<int> > getSkelleton(){ return sudokuSkelleton; }
+	std::vector< std::vector<int> > getSkelleton(){ return sudokuSkelleton; }
 };
 
 
 class SudokuAnsatz
 {
 private:
-	vector< vector<int> > sudoku;
+	std::vector< std::vector<int> > sudoku;
     int sudokuWeight;
 
 private:
 	void setWeight(int weight){ sudokuWeight = weight; }
 	
 public:
-	vector< vector<int> > loadByLines(SudokuSkelleton);
-	SudokuAnsatz(vector< vector<int> >);
+	std::vector< std::vector<int> > loadByLines(SudokuSkelleton);
+	SudokuAnsatz(std::vector< std::vector<int> >);
 	SudokuAnsatz(SudokuSkelleton);
+	int numberOfClues();
 	void toString();
 	int linesOBS();
 	int columnsOBS();
@@ -73,7 +72,7 @@ public:
 	int blockWeight(int , int );
 	int calculateWeight();
 	int getWeight(){ return sudokuWeight; }
-	vector< vector<int> > getAnsatz(){ return sudoku; }
+	std::vector< std::vector<int> > getAnsatz(){ return sudoku; }
 };
 
 

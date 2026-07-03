@@ -1,12 +1,9 @@
 SHELL := /bin/bash
-#CXX = g++ -std=c++11 -fopenmp
 CXX = g++ -O3 -Wall -Wextra -Wfloat-equal -Wundef -Wlogical-op -Wmissing-declarations -Wredundant-decls -Wshadow -std=c++11 -fopenmp
-#CXX = g++ -Wall -Wextra -Wfloat-equal -Wundef -Wlogical-op -Wmissing-declarations -Wredundant-decls -Wshadow -std=c++11 -fopenmp
 
 INCLUDE_DIRS = -Isrc
 
-DEPS = src/parameters.h \
-	   src/sudoku.h
+DEPS = src/sudoku.h
 
 OBJ = obj/main.o \
 	  obj/sudoku.o

@@ -1,22 +1,10 @@
-//Renan Câmara Pereira 2022
+// Renan Câmara Pereira
+// Solving a sudoku game in C++
 
-//Solving a sudoku in C++
-
-#include <cmath>
 #include <iostream>
-#include <fstream>
-#include <sstream>
 #include <vector>
-#include <tuple>
 #include <omp.h>
-#include <algorithm>
 #include "sudoku.h"
-
-using namespace std;
-
-
-
-
 
 int main(void)
 {	
@@ -24,46 +12,48 @@ int main(void)
     //srand((unsigned) time(0));
 	srand(1);
 
+	
 	double start_s = omp_get_wtime();
 
+	/*
 	SudokuSkelleton sudokuUnsolved = SudokuSkelleton(9,"sudoku_example1.dat");
 
 	sudokuUnsolved.toString();
 
-	cout << sudokuUnsolved.numberOfClues() << "\n";
+	std::cout << "# of clues: " << sudokuUnsolved.numberOfClues() << "\n";
 
 	SudokuAnsatz sudoku1(sudokuUnsolved);
 
-	std::cout << "\n" << std::endl;
+	std::cout << "\n";
 	sudoku1.toString();
+	
+	std::cout << sudoku1.getWeight() << "\n";
+	*/
 
-	cout << sudoku1.getWeight() << endl;
 
-
-
-	vector< vector<int> > sudoku_to_solve;
+	std::vector< std::vector<int> > sudoku_to_solve;
 
 	sudoku_to_solve = read_sudoku_from_file(9, "sudoku_example1.dat"); 
 
 	print_sudoku(sudoku_to_solve);
 
-	cout << sudoku_number_of_clues(sudoku_to_solve) << "\n";
+	std::cout << sudoku_number_of_clues(sudoku_to_solve) << "\n";
 
 	//generate sudoku population
-	vector< vector< vector<int> > > sudoku_population;
+	std::vector< std::vector< std::vector<int> > > sudoku_population;
 	int N = 50;
 	int N_births_from_vacuum = 10;
 	int N_descendents = 20;
 	int M = N;
 
 
-	vector< vector< vector<int> > > sudoku_pop = generate_population(N, sudoku_to_solve);
+	std::vector< std::vector< std::vector<int> > > sudoku_pop = generate_population(N, sudoku_to_solve);
 
 
 	int generations = 350;
 	for (int i = 0; i < generations; ++i)
 	{
-		cout << i << "\t" << sudoku_pop.size() << "\n";
+		std::cout << i << "\t" << sudoku_pop.size() << "\n";
 
 
 
@@ -80,7 +70,7 @@ int main(void)
 
 
 		//generate descendents
-		vector< vector< vector<int> > > sudoku_pop_descendents;
+		std::vector< std::vector< std::vector<int> > > sudoku_pop_descendents;
 		sudoku_pop_descendents = generate_descendents(sudoku_to_solve, sudoku_pop, N_descendents);
 		//mutate descendents
 		for (int j = 0; j < sudoku_pop_descendents.size(); ++j)
@@ -96,7 +86,7 @@ int main(void)
 
 		int neo_weight = weight_sudoku_configuration(sudoku_pop[0]);
 
-		cout << "weight of the fittest individual: " << neo_weight << "\n";
+		std::cout << "weight of the fittest individual: " << neo_weight << "\n";
 		if (neo_weight==0){ break; }
 	
 	}
@@ -105,9 +95,7 @@ int main(void)
 
 	double stop_s = omp_get_wtime();
 
-    cout << "Run Time: " << (stop_s-start_s) << "\n";
-
-
+    std::cout << "Run Time: " << (stop_s-start_s) << "\n";
 
 	return 0;
 }
