@@ -27,7 +27,7 @@ namespace Sudoku
 
 	std::vector< std::tuple<int, int> > population_weight(std::vector< std::vector< std::vector<int> > > );
 
-	int tournament(std::vector< std::vector< std::vector<int> > > );
+	int battle(std::vector< std::vector< std::vector<int> > > );
 
 	std::vector< std::vector< std::vector<int> > > generate_population(int , std::vector< std::vector<int> > );
 

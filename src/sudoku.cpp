@@ -369,8 +369,8 @@ vector< tuple<int, int> > Sudoku::population_weight(vector< vector< vector<int> 
 }
 
 
-//sudoku tournament
-int Sudoku::tournament(vector< vector< vector<int> > > sudoku_population)
+//sudoku battle
+int Sudoku::battle(vector< vector< vector<int> > > sudoku_population)
 {
 	int warrior_1 = ( rand() % sudoku_population.size() );
 	int warrior_2 = ( rand() % sudoku_population.size() );
@@ -412,9 +412,9 @@ vector< vector< vector<int> > > Sudoku::generate_descendents(
 	{
 		//create couple
 		vector<int> partners;
-		partners.push_back( tournament(sudoku_population) );
-		partners.push_back( tournament(sudoku_population) );
-		while( partners[0]==partners[1] ){ partners[0] = tournament(sudoku_population); }
+		partners.push_back( battle(sudoku_population) );
+		partners.push_back( battle(sudoku_population) );
+		while( partners[0]==partners[1] ){ partners[0] = battle(sudoku_population); }
 		
 		//the son is constructed by chosing lines, randomly, from the parents, guaranteeing that the overall line OBS is conserved and equal to zero
 		vector< vector<int> > sudoku_descendent;
