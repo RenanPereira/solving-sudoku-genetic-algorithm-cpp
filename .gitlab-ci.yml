@@ -29,4 +29,4 @@ solve_sudoku_9_example:
 
       cd bin/ 
       
-      ./sudoku.out
+      ./sudoku.out solve-sudoku 9 sudoku_9_example_1.dat

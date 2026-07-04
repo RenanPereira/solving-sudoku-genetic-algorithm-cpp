@@ -548,3 +548,21 @@ std::vector< std::vector< std::vector<int> > > Sudoku::generate_and_evolve_popul
 
 	return sudoku_population;
 }
+
+void Sudoku::solve(int sudoku_size, string sudoku_filename, GeneticAlgorithmParameters params)
+{
+	// Use current time as seed for random generator
+	//srand((unsigned) time(0));
+	srand(1);
+
+	std::vector< std::vector<int> > sudoku_to_solve = Sudoku::read_from_file(sudoku_size, sudoku_filename); 
+
+	Sudoku::print(sudoku_to_solve);
+
+	std::cout << Sudoku::number_of_clues(sudoku_to_solve) << "\n";
+
+	std::vector< std::vector< std::vector<int> > > sudoku_population =  Sudoku::generate_and_evolve_population(
+		sudoku_to_solve,
+		params
+	);
+}

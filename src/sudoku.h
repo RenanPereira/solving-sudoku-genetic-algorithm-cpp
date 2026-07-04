@@ -1,28 +1,30 @@
 #ifndef SUDOKU_H
 #define SUDOKU_H
 
+#include <vector>
+
 namespace Sudoku
 {
-
 	struct GeneticAlgorithmParameters
-{
-    int population_size = 50;
+	{
+		int population_size = 50;
 
-    // Fraction of the population replaced by randomly generated individuals
-    double birth_to_population_size_ratio = 0.2;
+		// Fraction of the population replaced by randomly generated individuals
+		double birth_to_population_size_ratio = 0.2;
 
-    // Number of offspring generated each generation
-    int number_descendents = 20;
+		// Number of offspring generated each generation
+		int number_descendents = 20;
 
-    // Maximum number of generations
-    int number_generations = 350;
+		// Maximum number of generations
+		int number_generations = 350;
 
-    // Maximum mutation intensity applied to existing population
-    double max_mutation_fraction_parents = 0.25;
+		// Maximum mutation intensity applied to existing population
+		double max_mutation_fraction_parents = 0.25;
 
-    // Maximum mutation intensity applied to offspring
-    double max_mutation_fraction_descendents = 1.0;
-};
+		// Maximum mutation intensity applied to offspring
+		double max_mutation_fraction_descendents = 1.0;
+	};
+
 
 	std::vector< std::vector<int> > read_from_file(int , std::string );
 
@@ -74,6 +76,8 @@ namespace Sudoku
 		std::vector< std::vector<int> > ,
 		GeneticAlgorithmParameters 
 	);
+
+	void solve(int , std::string , GeneticAlgorithmParameters );
 }
 
 #endif

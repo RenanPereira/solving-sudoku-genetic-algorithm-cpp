@@ -4,10 +4,12 @@ CXX = g++ -O3 -Wall -Wextra -Wfloat-equal -Wundef -Wlogical-op -Wmissing-declara
 INCLUDE_DIRS = -Isrc
 
 DEPS = src/sudoku.h \
+	   src/command_line_args_processor.h \
 	   src/SudokuSkelleton.h \
 	   src/SudokuAnsatz.h
 
 OBJ = obj/main.o \
+	  obj/command_line_args_processor.o \
 	  obj/sudoku.o \
 	  obj/SudokuSkelleton.o \
 	  obj/SudokuAnsatz.o
