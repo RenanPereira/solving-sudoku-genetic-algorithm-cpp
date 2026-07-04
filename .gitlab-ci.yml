@@ -30,5 +30,3 @@ solve_sudoku_9_example:
       cd bin/ 
       
       ./sudoku.out
-
-      make clean
