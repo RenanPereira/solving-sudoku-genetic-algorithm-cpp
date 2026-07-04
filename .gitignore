@@ -1,7 +1,5 @@
 .vscode/
 
-obj/
+obj/*.o
 
 bin/*.out
-
-src/*/*.o*
