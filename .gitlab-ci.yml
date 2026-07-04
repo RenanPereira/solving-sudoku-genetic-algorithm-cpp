@@ -1,0 +1,22 @@
+stages:
+  - solve_sudoku
+
+variables:
+  GIT_STRATEGY: clone
+
+solve_sudoku_9_example:
+  image: ubuntu:24.04
+
+  stage: solve_sudoku
+
+  script:
+    - |
+      echo "Solving a sudoku 9 by 9 example..."
+
+      make -j$(nproc)
+
+      cd bin/ 
+      
+      ./sudoku.out
+
+      make clean
