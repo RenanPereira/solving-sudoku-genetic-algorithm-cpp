@@ -466,3 +466,85 @@ vector< vector< vector<int> > > Sudoku::survival_of_the_fittest(
 
 	return sudoku_newpopulation;
 }
+
+std::vector< std::vector< std::vector<int> > > Sudoku::generate_and_evolve_population(
+	std::vector< std::vector<int> > sudoku_to_solve,
+	GeneticAlgorithmParameters params
+)
+{	
+	int population_size = params.population_size;
+	double birth_to_population_size_ratio = params.birth_to_population_size_ratio;
+	int number_descendents = params.number_descendents;
+	int number_generations = params.number_generations;
+	double max_mutation_fraction_parents = params.max_mutation_fraction_parents;
+	double max_mutation_fraction_descendents = params.max_mutation_fraction_descendents;
+	
+	//generate sudoku population
+	std::vector< std::vector< std::vector<int> > > sudoku_population;
+	sudoku_population = Sudoku::generate_population(population_size, sudoku_to_solve);
+
+	for (int i = 0; i < number_generations; ++i)
+	{	
+		std::cout << "\n";
+		std::cout << "generation: " <<  i << "\n";
+		std::cout << "population size:" << sudoku_population.size() << "\n";
+		
+		//add new candidates ("births from vacuum")
+		const int number_births_from_vacuum = int(birth_to_population_size_ratio*population_size);
+		for (int j = 0; j < number_births_from_vacuum; ++j)
+		{
+			sudoku_population.push_back( Sudoku::generate_by_lines(sudoku_to_solve) );
+		}
+
+		//mutate some individuals
+		for (int j = 0; j < int(sudoku_population.size()); ++j)
+		{
+			int x = ( rand() % sudoku_population.size() );
+			sudoku_population[x] = Sudoku::mutate(sudoku_to_solve, sudoku_population[x], max_mutation_fraction_parents);
+		}
+
+		//generate descendents
+		std::vector< std::vector< std::vector<int> > > sudoku_population_descendents;
+		sudoku_population_descendents = Sudoku::generate_descendents(
+			sudoku_to_solve, 
+			sudoku_population, 
+			number_descendents
+		);
+
+		//mutate descendents
+		for (int j = 0; j < int(sudoku_population_descendents.size()); ++j)
+		{
+			sudoku_population_descendents[j] = Sudoku::mutate(
+				sudoku_to_solve, 
+				sudoku_population_descendents[j], 
+				max_mutation_fraction_descendents
+			);
+		}
+
+		//combine populations and only keep the fittest, maintaining the population size
+		sudoku_population = Sudoku::survival_of_the_fittest(sudoku_population, sudoku_population_descendents, population_size);
+
+		int neo_weight = Sudoku::weight_configuration(sudoku_population[0]);
+		std::cout << "weight of the fittest: " << neo_weight << "\n";
+
+		if (neo_weight==0)
+		{ 
+			break; 
+		}
+	
+	}
+
+	if( Sudoku::weight_configuration(sudoku_population[0])==0 )
+	{	
+		std::cout << "\n";
+		std::cout << "solution found! \n";
+		Sudoku::print(sudoku_population[0]);
+	}
+	else
+	{	
+		std::cout << "\n";
+		std::cout << "solution NOT found in this run! \n";
+	}
+
+	return sudoku_population;
+}

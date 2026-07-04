@@ -3,6 +3,27 @@
 
 namespace Sudoku
 {
+
+	struct GeneticAlgorithmParameters
+{
+    int population_size = 50;
+
+    // Fraction of the population replaced by randomly generated individuals
+    double birth_to_population_size_ratio = 0.2;
+
+    // Number of offspring generated each generation
+    int number_descendents = 20;
+
+    // Maximum number of generations
+    int number_generations = 350;
+
+    // Maximum mutation intensity applied to existing population
+    double max_mutation_fraction_parents = 0.25;
+
+    // Maximum mutation intensity applied to offspring
+    double max_mutation_fraction_descendents = 1.0;
+};
+
 	std::vector< std::vector<int> > read_from_file(int , std::string );
 
 	int print(std::vector< std::vector<int> > );
@@ -47,6 +68,11 @@ namespace Sudoku
 		std::vector< std::vector< std::vector<int> > > , 
 		std::vector< std::vector< std::vector<int> > > , 
 		int 
+	);
+
+	std::vector< std::vector< std::vector<int> > > generate_and_evolve_population(
+		std::vector< std::vector<int> > ,
+		GeneticAlgorithmParameters 
 	);
 }
 
