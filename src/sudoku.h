@@ -1,81 +1,83 @@
 #ifndef SUDOKU_H
 #define SUDOKU_H
 
-using namespace std;
+#include <vector>
 
-vector< vector<int> > read_sudoku_from_file(int , string );
-
-int print_sudoku(vector< vector<int> > );
-
-int sudoku_number_of_clues(vector< vector<int> > );
-
-vector< vector<int> > generate_sudoku_by_lines(vector< vector<int> > );
-
-int sudoku_line_weight(vector< vector<int> > , int );
-
-int sudoku_column_weight(vector< vector<int> > , int );
-
-int sudoku_block_weight(vector< vector<int> > , int , int );
-
-int sudoku_lines_OBS(vector< vector<int> > );
-
-int sudoku_columns_OBS(vector< vector<int> > );
-
-int sudoku_blocks_OBS(vector< vector<int> > );
-
-int weight_sudoku_configuration(vector< vector<int> > );
-
-vector< tuple<int, int> > population_weight(vector< vector< vector<int> > > );
-
-int sudoku_tournament(vector< vector< vector<int> > > );
-
-vector< vector< vector<int> > > generate_population(int , vector< vector<int> > );
-
-vector< vector< vector<int> > > generate_descendents(vector< vector<int> > , vector< vector< vector<int> > > , int);
-
-vector< vector<int> > mutate_sudoku(vector< vector<int> > , vector< vector<int> >, double );
-
-vector< vector< vector<int> > > survival_of_the_fittest(vector< vector< vector<int> > > , vector< vector< vector<int> > > , int );
-
-
-class SudokuSkelleton
+namespace Sudoku
 {
-private: 
-	vector< vector<int> > sudokuSkelleton;
+	struct GeneticAlgorithmParameters
+	{
+		int population_size = 50;
 
-public: 
-	SudokuSkelleton(int , string );
-	void toString();
-	int numberOfClues();
-	vector< vector<int> > getSkelleton(){ return sudokuSkelleton; }
-};
+		// Fraction of the population replaced by randomly generated individuals
+		double birth_to_population_size_ratio = 0.2;
 
+		// Number of offspring generated each generation
+		int number_descendents = 20;
 
-class SudokuAnsatz
-{
-private:
-	vector< vector<int> > sudoku;
-    int sudokuWeight;
+		// Maximum number of generations
+		int number_generations = 350;
 
-private:
-	void setWeight(int weight){ sudokuWeight = weight; }
-	
-public:
-	vector< vector<int> > loadByLines(SudokuSkelleton);
-	SudokuAnsatz(vector< vector<int> >);
-	SudokuAnsatz(SudokuSkelleton);
-	void toString();
-	int linesOBS();
-	int columnsOBS();
-	int blocksOBS();
-	int lineWeight(int );
-	int columnWeight(int );
-	int blockWeight(int , int );
-	int calculateWeight();
-	int getWeight(){ return sudokuWeight; }
-	vector< vector<int> > getAnsatz(){ return sudoku; }
-};
+		// Maximum mutation intensity applied to existing population
+		double max_mutation_fraction_parents = 0.25;
+
+		// Maximum mutation intensity applied to offspring
+		double max_mutation_fraction_descendents = 1.0;
+	};
 
 
+	std::vector< std::vector<int> > read_from_file(int , std::string );
+
+	int print(std::vector< std::vector<int> > );
+
+	int number_of_clues(std::vector< std::vector<int> > );
+
+	std::vector< std::vector<int> > generate_by_lines(std::vector< std::vector<int> > );
+
+	int line_weight(std::vector< std::vector<int> > , int );
+
+	int column_weight(std::vector< std::vector<int> > , int );
+
+	int block_weight(std::vector< std::vector<int> > , int , int );
+
+	int lines_observable(std::vector< std::vector<int> > );
+
+	int columns_observable(std::vector< std::vector<int> > );
+
+	int blocks_observable(std::vector< std::vector<int> > );
+
+	int weight_configuration(std::vector< std::vector<int> > );
+
+	std::vector< std::tuple<int, int> > population_weight(std::vector< std::vector< std::vector<int> > > );
+
+	int battle(std::vector< std::vector< std::vector<int> > > );
+
+	std::vector< std::vector< std::vector<int> > > generate_population(int , std::vector< std::vector<int> > );
+
+	std::vector< std::vector< std::vector<int> > > generate_descendents(
+		std::vector< std::vector<int> > , 
+		std::vector< std::vector< std::vector<int> > > , 
+		int
+	);
+
+	std::vector< std::vector<int> > mutate(
+		std::vector< std::vector<int> > , 
+		std::vector< std::vector<int> >, 
+		double 
+	);
+
+	std::vector< std::vector< std::vector<int> > > survival_of_the_fittest(
+		std::vector< std::vector< std::vector<int> > > , 
+		std::vector< std::vector< std::vector<int> > > , 
+		int 
+	);
+
+	std::vector< std::vector< std::vector<int> > > generate_and_evolve_population(
+		std::vector< std::vector<int> > ,
+		GeneticAlgorithmParameters 
+	);
+
+	void solve(int , std::string , GeneticAlgorithmParameters );
+}
 
 #endif

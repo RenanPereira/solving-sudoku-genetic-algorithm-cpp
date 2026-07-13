@@ -1,17 +1,24 @@
 SHELL := /bin/bash
-CXX = g++ -std=c++11 -fopenmp
-#CXX = g++ -Wall -Wextra -Wfloat-equal -Wundef -Wlogical-op -Wmissing-declarations -Wredundant-decls -Wshadow -std=c++11 -fopenmp
+CXX = g++ -O3 -Wall -Wextra -Wfloat-equal -Wundef -Wlogical-op -Wmissing-declarations -Wredundant-decls -Wshadow -std=c++11 -fopenmp
 
-DEPS = src/parameters.h src/sudoku.h
-OBJ = obj/main.o obj/sudoku.o
+INCLUDE_DIRS = -Isrc
 
+DEPS = src/sudoku.h \
+	   src/command_line_args_processor.h \
+	   src/SudokuSkelleton.h \
+	   src/SudokuAnsatz.h
+
+OBJ = obj/main.o \
+	  obj/command_line_args_processor.o \
+	  obj/sudoku.o \
+	  obj/SudokuSkelleton.o \
+	  obj/SudokuAnsatz.o
 
 obj/%.o: src/%.cpp $(DEPS)
-	$(CXX) -I/usr/local/include -c $< -o $@
+	$(CXX) $(INCLUDE_DIRS) -c $< -o $@
 
 run: $(OBJ) 
-	$(CXX) -o bin/sudoku.out $(OBJ) -L/usr/local/lib -lm
+	$(CXX) $(OBJ) $(INCLUDE_DIRS) -o bin/sudoku.out
 
 clean: 
 	rm -f bin/sudoku.out $(OBJ)
-
